@@ -23,7 +23,25 @@ public class Main {
         } else{
             Reservation rv = new Reservation(roomNumber, checkIN, checkOut);
             System.out.println(rv);
+
+            System.out.println("Enter dates to update the reservation: ");
+            System.out.print("Check-in date (dd/mm/yyyy): ");
+            checkIN = Reservation.sdf.parse(sc.next());
+            System.out.print("Check-out date (dd/mm/yyyy): ");
+            checkOut = Reservation.sdf.parse(sc.next());
+
+            String error = rv.updateDates(checkIN, checkOut);
+            if(error!=null){
+                System.out.println(error);
+            } else{
+                System.out.println(rv);
+            }
+
+
         }
+
+
+
 
         sc.close();
 
