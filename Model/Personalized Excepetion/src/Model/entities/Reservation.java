@@ -1,4 +1,6 @@
-package Model.entities.enums;
+package Model.entities;
+
+import Model.exceptions.DomainExceptions;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -10,7 +12,10 @@ public class Reservation {
     private Date checkOut;
     public static SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
     public Reservation(){ }
-    public Reservation(Integer roomNumber, Date checkIN, Date checkOut) {
+    public Reservation(Integer roomNumber, Date checkIN, Date checkOut) throws DomainExceptions {
+        if(!checkOut.after(checkIN)){
+            throw new DomainExceptions("Error in reservation: Check-out date must be after Check-in");
+        }
         this.roomNumber = roomNumber;
         this.checkIN = checkIN;
         this.checkOut = checkOut;
@@ -24,21 +29,20 @@ public class Reservation {
 
     }
 
-    public String updateDates(Date checkIN, Date checkOut){
+    public void updateDates(Date checkIN, Date checkOut) throws DomainExceptions {
         Date now = new Date();
 
         if(checkIN.before(now) || checkOut.before(now)){
-            return "Error in reservation: Reservation dates for update must be future dates";
+            throw new DomainExceptions("Error in reservation: Reservation dates for update must be future dates");
         }
 
         if(!checkOut.after(checkIN)){
-            return "Error in reservation: Check-out date must be after Check-in";
+            throw new DomainExceptions("Error in reservation: Check-out date must be after Check-in");
         }
 
         this.checkIN = checkIN;
         this.checkOut = checkOut;
 
-        return null;
     }
 
     public void setRoomNumber(Integer roomNumber) {
